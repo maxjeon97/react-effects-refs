@@ -1,0 +1,9 @@
+.DeckOfCards-drawbtn {
+  position: fixed;
+  left: 47%;
+  top: 10%;
+  border-radius: 8px;
+  font-size: 2em;
+  padding: 10px 20px;
+  cursor: pointer;
+}

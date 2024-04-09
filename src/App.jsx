@@ -1,38 +1,41 @@
-import { useState } from 'react';
-import logo from './logo.svg'
+import { React, useState, useEffect } from 'react';
 import './App.css';
+import DeckOfCards from './DeckOfCards';
 
+const DECK_OF_CARDS_BASE_URL = "https://deckofcardsapi.com/api/deck";
 
 /** Component for entire page.
  *
  * Props: none
  * State: none
  *
+ * App -> DeckOfCards
+ *
 */
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [deck, setDeck] = useState({
+    id: null,
+    isLoading: true,
+  });
 
-  function incrCount() {
-    setCount(count => count + 1);
-  }
+  useEffect(function fetchDeckWhenMounted() {
+    async function fetchDeck() {
+      const response = await fetch(`${DECK_OF_CARDS_BASE_URL}/new/shuffle/?deck_count=1`);
+      const data = await response.json();
+      setDeck({
+        id: data.deck_id,
+        isLoading: false,
+      });
+    }
+    fetchDeck();
+  }, []);
+
+  if (deck.isLoading) return <i>Loading...</i>;
 
   return (
     <div className="App">
-      <main>
-        <img src={logo} className="App-logo" alt="Rithm" />
-        <h1>Rithm React Starter</h1>
-        <p>
-          <button
-              className="btn btn-primary"
-              onClick={incrCount}>
-            Clicked: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>src/App.jsx</code>
-        </p>
-      </main>
+      <DeckOfCards deckId={deck.id}/>
     </div>
   );
 };
